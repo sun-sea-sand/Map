@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather UTA</title>
+    <title>Map - Display Markers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
@@ -13,9 +13,81 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .marker {
+            background-image: url('marker.png');
+            background-size: cover;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .popup {
+            max-width: 300px;
+        }
+    </style>
 </head>
 <body>
- 
+    <div id='map'></div>
+    <script>
+        // Define the data
+        let mapData = [
+            {
+                lat: 37.7749,
+                lng: -122.4194,
+                name: 'San Francisco',
+                description: 'A beautiful city by the bay.'
+            },
+            {
+                lat: 40.7128,
+                lng: -74.0060,
+                name: 'New York City',
+                description: 'The city that never sleeps.'
+            }
+        ];
+
+        // Create the map
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYXlvdWIyMjExIiwiYSI6ImNsM3o2N3U2dzBreHkza3F3dm8yMnRkaTgifQ.QcyJ9B6_e5S93W3EgInZyQ';
+        let map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-98.5795, 39.8283],
+            zoom: 3
+        });
+
+        // Add the markers to the map
+        mapData.forEach(function(markerData) {
+            // Create the marker element
+            let markerElement = document.createElement('div');
+            markerElement.className = 'marker';
+
+            // Create the popup element
+            let popupElement = document.createElement('div');
+            popupElement.className = 'popup';
+            popupElement.innerHTML = `
+                <h3>${markerData.name}</h3>
+                <p>${markerData.description}</p>
+            `;
+
+            // Add the marker to the map
+            new mapboxgl.Marker(markerElement)
+                .setLngLat([markerData.lng, markerData.lat])
+                .setPopup(new mapboxgl.Popup().setDOMContent(popupElement))
+                .addTo(map);
+        });
+    </script>
 
 </body>
 </html>
