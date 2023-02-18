@@ -43,20 +43,7 @@
     <div id='map'></div>
     <script>
         // Define the data
-        let mapData = [
-            {
-                lat: 37.7749,
-                lng: -122.4194,
-                name: 'San Francisco',
-                description: 'A beautiful city by the bay.'
-            },
-            {
-                lat: 40.7128,
-                lng: -74.0060,
-                name: 'New York City',
-                description: 'The city that never sleeps.'
-            }
-        ];
+        let mapData = [];
 
         // Create the map
         mapboxgl.accessToken = 'pk.eyJ1IjoiYXlvdWIyMjExIiwiYSI6ImNsM3o2N3U2dzBreHkza3F3dm8yMnRkaTgifQ.QcyJ9B6_e5S93W3EgInZyQ';
@@ -67,26 +54,50 @@
             zoom: 3
         });
 
-        // Add the markers to the map
-        mapData.forEach(function(markerData) {
-            // Create the marker element
-            let markerElement = document.createElement('div');
-            markerElement.className = 'marker';
+        function addMarker() {
+    // Get the form data
+    let lat = document.getElementById('lat').value;
+    let lng = document.getElementById('lng').value;
+    let name = document.getElementById('name').value;
+    let description = document.getElementById('description').value;
 
-            // Create the popup element
-            let popupElement = document.createElement('div');
-            popupElement.className = 'popup';
-            popupElement.innerHTML = `
-                <h3>${markerData.name}</h3>
-                <p>${markerData.description}</p>
-            `;
+    // Add the data to the mapData array
+    mapData.push({
+        lat: lat,
+        lng: lng,
+        name: name,
+        description: description
+    });
 
-            // Add the marker to the map
-            new mapboxgl.Marker(markerElement)
-                .setLngLat([markerData.lng, markerData.lat])
-                .setPopup(new mapboxgl.Popup().setDOMContent(popupElement))
-                .addTo(map);
-        });
+    // Create a new marker for the current data
+    let marker = new mapboxgl.Marker()
+        .setLngLat([lng, lat])
+        .addTo(map);
+
+    // Add a popup to the marker for the current data
+    let popup = new mapboxgl.Popup()
+        .setHTML(`
+            <h3>${name}</h3>
+            <p>${description}</p>
+        `);
+
+    marker.setPopup(popup);
+
+    // Create markers for all existing data in the mapData array
+    mapData.forEach(function(data) {
+        let marker = new mapboxgl.Marker()
+            .setLngLat([data.lng, data.lat])
+            .addTo(map);
+
+        let popup = new mapboxgl.Popup()
+            .setHTML(`
+                <h3>${data.name}</h3>
+                <p>${data.description}</p>
+            `);
+
+        marker.setPopup(popup);
+    });
+}
     </script>
 
 </body>
