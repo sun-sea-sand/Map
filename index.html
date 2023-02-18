@@ -13,92 +13,28 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
-<style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 100%;
-        }
-
-        .marker {
-            background-image: url('marker.png');
-            background-size: cover;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-        }
-
-        .popup {
-            max-width: 300px;
-        }
-    </style>
 </head>
 <body>
-    <div id='map'></div>
-    <script>
-        // Define the data
-        let mapData = [];
+	<h1>Map Form</h1>
 
-        // Create the map
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYXlvdWIyMjExIiwiYSI6ImNsM3o2N3U2dzBreHkza3F3dm8yMnRkaTgifQ.QcyJ9B6_e5S93W3EgInZyQ';
-        let map = new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/streets-v11',
-            center: [-98.5795, 39.8283],
-            zoom: 3
-        });
+	<form>
+		<label for="latitude">Latitude:</label>
+		<input type="text" id="latitude" required>
 
-        function addMarker() {
-    // Get the form data
-    let lat = document.getElementById('lat').value;
-    let lng = document.getElementById('lng').value;
-    let name = document.getElementById('name').value;
-    let description = document.getElementById('description').value;
+		<label for="longitude">Longitude:</label>
+		<input type="text" id="longitude" required>
 
-    // Add the data to the mapData array
-    mapData.push({
-        lat: lat,
-        lng: lng,
-        name: name,
-        description: description
-    });
+		<label for="name">Name:</label>
+		<input type="text" id="name" required>
 
-    // Create a new marker for the current data
-    let marker = new mapboxgl.Marker()
-        .setLngLat([lng, lat])
-        .addTo(map);
+		<label for="description">Description:</label>
+		<textarea id="description"></textarea>
 
-    // Add a popup to the marker for the current data
-    let popup = new mapboxgl.Popup()
-        .setHTML(`
-            <h3>${name}</h3>
-            <p>${description}</p>
-        `);
+		<button type="button" onclick="addMarker()">Add Marker</button>
+	</form>
 
-    marker.setPopup(popup);
+	<div id="map"></div>
 
-    // Create markers for all existing data in the mapData array
-    mapData.forEach(function(data) {
-        let marker = new mapboxgl.Marker()
-            .setLngLat([data.lng, data.lat])
-            .addTo(map);
-
-        let popup = new mapboxgl.Popup()
-            .setHTML(`
-                <h3>${data.name}</h3>
-                <p>${data.description}</p>
-            `);
-
-        marker.setPopup(popup);
-    });
-}
-    </script>
-
+	<script src="script.js"></script>
 </body>
 </html>
